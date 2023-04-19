@@ -1,0 +1,49 @@
+export default class ElmModules < HTMLElement
+  LINK_ADD = ""
+
+  def initialize
+    super
+
+    self.innerHTML = init_html()
+  end
+
+  def connectedCallback()
+  end
+
+  def disconnectedCallback()
+  end
+
+  def init_html()
+    template = """
+      <table class='table'>
+        <thead>
+          <tr style='width: 31%; text-align: left;'>
+            <th scope='col'>
+            <a href='#{LINK_ADD}'>
+              <p class='mb-0 fa fa-plus'></p>
+                Add
+              </a>
+            </th>
+            <th scope='col'>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope='row'>1</th>
+            <td>Mark</td>
+          </tr>
+          <tr>
+            <th scope='row'>2</th>
+            <td>Jacob</td>
+          </tr>
+          <tr>
+            <th scope='row'>3</th>
+            <td>Larry the Bird</td>
+          </tr>
+        </tbody>
+      </table>
+    """
+
+    return template
+  end
+end
