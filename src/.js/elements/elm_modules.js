@@ -3,7 +3,7 @@ export default class ElmModules extends HTMLElement {
     super();
     this.innerHTML = "<elm-spinner></elm-spinner>";
 
-    database.get(
+    database.query(
       "select name, description from modules",
       modules => this.innerHTML = this.init_html(modules)
     )

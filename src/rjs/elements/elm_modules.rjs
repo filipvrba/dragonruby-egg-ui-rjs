@@ -5,7 +5,7 @@ export default class ElmModules < HTMLElement
     super
 
     self.innerHTML = "<elm-spinner></elm-spinner>"
-    database.get("select name, description from modules") do |modules|
+    database.query("select name, description from modules") do |modules|
       self.innerHTML = init_html(modules)
     end
   end

@@ -5,6 +5,17 @@ export default class Database
     @name = name
   end
 
+  def query(query, &callback)
+    is_set = set(query) do |data|
+      callback(data) if callback
+    end
+    unless is_set
+      get(query) do |data|
+        callback(data) if callback
+      end
+    end
+  end
+
   def get(query, &callback)
     query_encode = encodeURIComponent(query)
     uri = "#{env.VITE_URL_API}?token=#{env.VITE_BEF_CLIENT}" +
@@ -13,5 +24,29 @@ export default class Database
     Net.get_json(uri) do |data|
       callback(data) if callback
     end
+  end
+
+  def set(query, &callback)
+    is_active = false
+    low_query = query.toLowerCase()
+    if low_query.indexOf('insert into') > -1 ||
+       low_query.indexOf('create table') > -1
+      is_active = true
+      Net.send('post', query) do |data|
+        callback(data) if callback
+      end
+    elsif low_query.indexOf('delete') > -1
+      is_active = true
+      Net.send('delete', query) do |data|
+        callback(data) if callback
+      end
+    elsif low_query.indexOf('update') > -1
+      is_active = true
+      Net.send('patch', query) do |data|
+        callback(data) if callback
+      end
+    end
+
+    return is_active
   end
 end
