@@ -1,1 +1,1 @@
-export const ENV = import.meta.env
+window.env = import.meta.env

@@ -1,0 +1,1 @@
+export const SQL_ERR = "SQL Error"

@@ -1,0 +1,17 @@
+import 'Net', './net'
+
+export default class Database
+  def initialize name
+    @name = name
+  end
+
+  def get(query, &callback)
+    query_encode = encodeURIComponent(query)
+    uri = "#{env.VITE_URL_API}?token=#{env.VITE_BEF_CLIENT}" +
+      "&database=#{env.VITE_DATABASE}&query=#{query_encode}"
+
+    Net.get_json(uri) do |data|
+      callback(data) if callback
+    end
+  end
+end

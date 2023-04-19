@@ -4,7 +4,10 @@ export default class ElmModules < HTMLElement
   def initialize
     super
 
-    self.innerHTML = init_html()
+    self.innerHTML = "<elm-spinner></elm-spinner>"
+    database.get("select name, description from modules") do |modules|
+      self.innerHTML = init_html(modules)
+    end
   end
 
   def connectedCallback()
@@ -13,14 +16,44 @@ export default class ElmModules < HTMLElement
   def disconnectedCallback()
   end
 
-  def init_html()
-    template = """
+  def init_html(modules)
+    l_trs = lambda do
+      trs = ""
+      modules.forEach do |_module|
+        tr = """
+          <tr>
+            <th scope='row'>#{_module.name}</th>
+            <td>#{_module.description}</td>
+          </tr>
+        """
+        trs += tr
+      end
+      return trs
+    end
+    l_title = lambda do |ext|
+      return """
+      <div class='text-center py-3'>
+        <h2>Modules</h2>
+        #{ext}
+      </div>
+      """
+    end
+
+    template = l_title("""
+      <a href='#{LINK_ADD}'>
+        <p class='mb-0 fa fa-plus'></p>
+        Add
+      </a>
+    """)
+    if modules.length > 0
+      template = """
+      #{l_title('')}
       <table class='table'>
         <thead>
           <tr style='width: 31%; text-align: left;'>
             <th scope='col'>
-            <a href='#{LINK_ADD}'>
-              <p class='mb-0 fa fa-plus'></p>
+              <a href='#{LINK_ADD}'>
+                <p class='mb-0 fa fa-plus'></p>
                 Add
               </a>
             </th>
@@ -28,21 +61,11 @@ export default class ElmModules < HTMLElement
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope='row'>1</th>
-            <td>Mark</td>
-          </tr>
-          <tr>
-            <th scope='row'>2</th>
-            <td>Jacob</td>
-          </tr>
-          <tr>
-            <th scope='row'>3</th>
-            <td>Larry the Bird</td>
-          </tr>
+          #{l_trs.call()}
         </tbody>
       </table>
-    """
+      """
+    end
 
     return template
   end

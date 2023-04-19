@@ -1,5 +1,7 @@
 import "ElmModules", "./elements/elm_modules"
 import "ElmHome", "./elements/elm_home"
+import "ElmSpinner", "./elements/elm_spinner"
 
 window.customElements.define( 'elm-modules', ElmModules )
 window.customElements.define( 'elm-home', ElmHome )
+window.customElements.define( 'elm-spinner', ElmSpinner )

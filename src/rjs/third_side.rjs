@@ -1,0 +1,3 @@
+import 'Database', './third-side/bef/database'
+
+window.database = Database.new("1")
