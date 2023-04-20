@@ -71,4 +71,4 @@ export default class ElmModules extends HTMLElement {
   }
 };
 
-ElmModules.LINK_ADD = ""
+ElmModules.LINK_ADD = "/module/add"

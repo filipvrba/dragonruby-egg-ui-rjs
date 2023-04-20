@@ -1,0 +1,65 @@
+export default class ElmModuleAdd < HTMLElement
+  def initialize
+    super
+
+    window.click_module_add = click_module_add
+    window.change_module_add = change_module_add
+    self.innerHTML = init_html()
+
+    @module_name = document.getElementById('module_name')
+    @github_url = document.getElementById('github_url')
+    @description = document.getElementById('description')
+    @btn_add = document.getElementById('btn_add')
+
+    change_module_add()
+  end
+
+  def init_html()
+    return """
+    <div class='text-center py-3'>
+      <h2>Add a module</h2>
+    </div>
+    <div class='container' style='width: 60%;'>
+      <div class='input-group input-group-sm mb-3'>
+        <span class='input-group-text' id='inputGroup-sizing-sm'>Module name</span>
+        <input id='module_name' type='text' class='form-control' onchange='change_module_add()' aria-label='Module name' aria-describedby='inputGroup-sizing-sm'>
+      </div>
+      <div class='input-group input-group-sm mb-3'>
+        <span class='input-group-text' id='inputGroup-sizing-sm'>GitHub URL</span>
+        <input id='github_url' type='text' class='form-control' onchange='change_module_add()' aria-label='GitHub URL' aria-describedby='inputGroup-sizing-sm'>
+      </div>
+      <div class='input-group input-group-sm mb-3'>
+        <span class='input-group-text'>Description</span>
+        <textarea id='description' class='form-control' onchange='change_module_add()' aria-label='Description' maxlength='150'></textarea>
+      </div>
+    </div>
+    <div class='text-center'>
+      <button id='btn_add' class='btn btn-primary mb-3' style='width: 25%;' onclick='click_module_add()'>Add</button>
+    </div>
+    """
+  end
+
+  def click_module_add()
+    database.query("SELECT name FROM modules") do |data|
+      if data.length == 0
+        inset_query = "INSERT INTO modules (author, name, github_url, description, created_at) " +
+          "VALUES ('filip', '#{@module_name.value}', '#{@github_url.value}', '#{@description.value}', #{Time.unix()})"
+        console.log inset_query
+        # database.query(inset_query) do |data|
+        # end
+      else
+        # TODO: print error for existing name module
+      end
+    end
+  end
+
+  def change_module_add()
+    is_empty = false
+    if @module_name.value == "" || @github_url.value == "" ||
+        @description.value == "" 
+      is_empty = true
+    end
+
+    @btn_add.disabled = is_empty
+  end
+end
