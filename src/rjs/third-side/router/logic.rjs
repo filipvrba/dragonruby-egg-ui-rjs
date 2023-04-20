@@ -1,0 +1,18 @@
+def route(event)
+  event = event || window.event
+  event.preventDefault()
+  window.history.pushState({}, "", event.target.href)
+  handle_location()
+end
+
+async def handle_location()
+  path = window.location.pathname
+  route = window.routes[path] || window.routes["404"]
+  html = await fetch(route).then(-> (data) {data.text()})
+  document.getElementById("app").innerHTML = html
+end
+
+window.onpopstate = handle_location
+window.route = route
+
+handle_location()
