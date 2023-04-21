@@ -7,8 +7,8 @@ export default class Net
       response.json()
     end)
     .then(lambda do |data|
-      if data.status == SQL_ERR
-        console.error("Sql raised error #{data.status_code} for '#{url}' query.")
+      if data.status_code
+        console.error("GET: #{data.status_code} #{data.status}")
         callback([]) if callback
       else
         callback(data) if callback
@@ -16,24 +16,26 @@ export default class Net
     end)
   end
 
-  def self.send(method, query)
+  def self.send(method, query, &callback)
+    method = method.toUpperCase()
     fetch(env.VITE_URL_API, {
-      method: method.toUpperCase(),
+      method: method,
       headers: {
         'Token': env.VITE_BEF_SERVER,
         'Database': env.VITE_DATABASE,
-        'Query': query
+        'Query': query,
       }
     })
     .then(lambda do |response|
       response.json()
     end)
     .then(lambda do |data|
-      if data.status == SQL_ERR
-        console.error("Sql raised error #{data.status_code} for '#{url}' query.")
-        callback([]) if callback
+      if data.status_code == 403 || data.status_code == 405 ||
+         data.status == SQL_ERR
+        console.error("#{method}: #{data.status_code} #{data.status}")
+        callback(false) if callback
       else
-        callback(data) if callback
+        callback(true) if callback
       end
     end)
   end

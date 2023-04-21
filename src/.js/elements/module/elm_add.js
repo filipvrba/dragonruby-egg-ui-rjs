@@ -20,6 +20,7 @@ export default class ElmModuleAdd extends HTMLElement {
       <div class='input-group input-group-sm mb-3'>
         <span class='input-group-text' id='inputGroup-sizing-sm'>Module name</span>
         <input id='module_name' type='text' class='form-control' onchange='change_module_add()' aria-label='Module name' aria-describedby='inputGroup-sizing-sm'>
+        <div class='invalid-feedback'>This module name already exists.</div>
       </div>
       <div class='input-group input-group-sm mb-3'>
         <span class='input-group-text' id='inputGroup-sizing-sm'>GitHub URL</span>
@@ -37,15 +38,24 @@ export default class ElmModuleAdd extends HTMLElement {
   };
 
   click_module_add() {
-    database.query("SELECT name FROM modules", (data) => {
-      // database.query(inset_query) do |data|
-      // end
-      // TODO: print error for existing name module
-      if (data.length == 0) {
-        let inset_query = `INSERT INTO modules (author, name, github_url, description, created_at) VALUES ('filip', '${this._module_name.value}', '${this._github_url.value}', '${this._description.value}', ${Time.unix()})`;
-        console.log(inset_query)
-      }
-    })
+    if (confirm("Do you really want to add this module?")) {
+      database.query(
+        `SELECT name FROM modules WHERE name='${this._module_name.value}'`,
+
+        (data) => {
+          if (data.length == 0) {
+            let inset_query = `INSERT INTO modules (author, name, github_url, description, created_at) VALUES ('filip', '${this._module_name.value}', '${this._github_url.value}', '${this._description.value}', ${Time.unix()})`;
+            console.log(inset_query);
+
+            database.query(inset_query, (is_ok) => {
+              if (is_ok) location.replace("/")
+            })
+          } else {
+            this._module_name.classList.add("is-invalid")
+          }
+        }
+      )
+    }
   };
 
   change_module_add() {
@@ -55,6 +65,10 @@ export default class ElmModuleAdd extends HTMLElement {
       is_empty = true
     };
 
-    this._btn_add.disabled = is_empty
+    this._btn_add.disabled = is_empty;
+
+    if (this._module_name.classList.value.indexOf("is-invalid") > -1) {
+      this._module_name.classList.remove("is-invalid")
+    }
   }
 }

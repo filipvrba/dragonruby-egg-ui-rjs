@@ -5,7 +5,7 @@ export default class ElmModules < HTMLElement
     super
 
     self.innerHTML = "<elm-spinner></elm-spinner>"
-    database.query("select name, description from modules") do |modules|
+    database.query("select author, name, description from modules") do |modules|
       self.innerHTML = init_html(modules)
     end
   end
@@ -22,7 +22,7 @@ export default class ElmModules < HTMLElement
       modules.forEach do |_module|
         tr = """
           <tr>
-            <th scope='row'>#{_module.name}</th>
+            <th scope='row'>#{_module.author}.#{_module.name}</th>
             <td>#{_module.description}</td>
           </tr>
         """

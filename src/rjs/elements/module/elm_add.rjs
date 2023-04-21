@@ -23,6 +23,7 @@ export default class ElmModuleAdd < HTMLElement
       <div class='input-group input-group-sm mb-3'>
         <span class='input-group-text' id='inputGroup-sizing-sm'>Module name</span>
         <input id='module_name' type='text' class='form-control' onchange='change_module_add()' aria-label='Module name' aria-describedby='inputGroup-sizing-sm'>
+        <div class='invalid-feedback'>This module name already exists.</div>
       </div>
       <div class='input-group input-group-sm mb-3'>
         <span class='input-group-text' id='inputGroup-sizing-sm'>GitHub URL</span>
@@ -40,15 +41,20 @@ export default class ElmModuleAdd < HTMLElement
   end
 
   def click_module_add()
-    database.query("SELECT name FROM modules") do |data|
-      if data.length == 0
-        inset_query = "INSERT INTO modules (author, name, github_url, description, created_at) " +
-          "VALUES ('filip', '#{@module_name.value}', '#{@github_url.value}', '#{@description.value}', #{Time.unix()})"
-        console.log inset_query
-        # database.query(inset_query) do |data|
-        # end
-      else
-        # TODO: print error for existing name module
+    if confirm('Do you really want to add this module?')
+      database.query("SELECT name FROM modules WHERE name='#{@module_name.value}'") do |data|
+        if data.length == 0
+          inset_query = "INSERT INTO modules (author, name, github_url, description, created_at) " +
+            "VALUES ('filip', '#{@module_name.value}', '#{@github_url.value}', '#{@description.value}', #{Time.unix()})"
+          console.log inset_query
+          database.query(inset_query) do |is_ok|
+            if is_ok
+              location.replace('/')
+            end
+          end
+        else
+          @module_name.classList.add('is-invalid')
+        end
       end
     end
   end
@@ -59,7 +65,10 @@ export default class ElmModuleAdd < HTMLElement
         @description.value == "" 
       is_empty = true
     end
-
     @btn_add.disabled = is_empty
+
+    if @module_name.classList.value.indexOf('is-invalid') > -1
+      @module_name.classList.remove('is-invalid')
+    end
   end
 end

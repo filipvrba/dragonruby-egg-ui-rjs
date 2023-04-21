@@ -1,8 +1,8 @@
 export default class Net {
   static get_json(url, callback) {
     fetch(url).then(response => response.json()).then((data) => {
-      if (data.status == Net.SQL_ERR) {
-        console.error(`Sql raised error ${data.status_code} for '${url}' query.`);
+      if (data.status_code) {
+        console.error(`GET: ${data.status_code} ${data.status}`);
         if (callback) return callback([])
       } else if (callback) {
         return callback(data)
@@ -10,17 +10,19 @@ export default class Net {
     })
   };
 
-  static send(method, query) {
-    fetch(env.VITE_URL_API, {method: method.toUpperCase(), headers: {
+  static send(method, query, callback) {
+    method = method.toUpperCase();
+
+    fetch(env.VITE_URL_API, {method, headers: {
       Token: env.VITE_BEF_SERVER,
       Database: env.VITE_DATABASE,
       Query: query
     }}).then(response => response.json()).then((data) => {
-      if (data.status == Net.SQL_ERR) {
-        console.error(`Sql raised error ${data.status_code} for '${url}' query.`);
-        if (callback) return callback([])
+      if (data.status_code == 403 || data.status_code == 405 || data.status == Net.SQL_ERR) {
+        console.error(`${method}: ${data.status_code} ${data.status}`);
+        if (callback) return callback(false)
       } else if (callback) {
-        return callback(data)
+        return callback(true)
       }
     })
   }

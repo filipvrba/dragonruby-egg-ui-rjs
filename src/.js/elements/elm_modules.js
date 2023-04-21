@@ -4,7 +4,7 @@ export default class ElmModules extends HTMLElement {
     this.innerHTML = "<elm-spinner></elm-spinner>";
 
     database.query(
-      "select name, description from modules",
+      "select author, name, description from modules",
       modules => this.innerHTML = this.init_html(modules)
     )
   };
@@ -19,7 +19,7 @@ export default class ElmModules extends HTMLElement {
       modules.forEach((_module) => {
         let tr = `${`
           <tr>
-            <th scope='row'>${_module.name}</th>
+            <th scope='row'>${_module.author}.${_module.name}</th>
             <td>${_module.description}</td>
           </tr>
         `}`;
