@@ -1,5 +1,7 @@
+import 'Pages', './pages'
+
 window.routes = {
-  "404": "/pages/404.html",
-  "/": "/pages/index.html",
-  "/module/add": "/pages/module/add.html",
+  "404": Pages::ERR_404,
+  "/": Pages::HOME,
+  "/module/add": Pages::MODULE_ADD,
 } 

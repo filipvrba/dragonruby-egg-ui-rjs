@@ -7,8 +7,7 @@ function route(event) {
 
 async function handle_location() {
   let path = window.location.pathname;
-  let route = window.routes[path] || window.routes["404"];
-  let html = await fetch(route).then(data => data.text());
+  let html = window.routes[path] || window.routes["404"];
   document.getElementById("app").innerHTML = html
 };
 

@@ -7,8 +7,7 @@ end
 
 async def handle_location()
   path = window.location.pathname
-  route = window.routes[path] || window.routes["404"]
-  html = await fetch(route).then(-> (data) {data.text()})
+  html = window.routes[path] || window.routes["404"]
   document.getElementById("app").innerHTML = html
 end
 
