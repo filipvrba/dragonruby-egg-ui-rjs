@@ -1,16 +1,13 @@
 export default class ElmModules extends HTMLElement {
   constructor() {
     super();
-    this.innerHTML = "<elm-spinner></elm-spinner>";
+    this.innerHTML = this.get_title("<elm-spinner></elm-spinner>");
 
     database.query(
-      "select author, name, description from modules",
+      "select * from modules",
       modules => this.innerHTML = this.init_html(modules)
     )
   };
-
-  connectedCallback() {};
-  disconnectedCallback() {};
 
   init_html(modules) {
     let l_trs = () => {
@@ -19,7 +16,14 @@ export default class ElmModules extends HTMLElement {
       modules.forEach((_module) => {
         let tr = `${`
           <tr>
-            <th scope='row'>${_module.author}.${_module.name}</th>
+            <th scope='row'>    
+              <a href='${_module.github_url}'>
+                <p class='fa fa-github my-0'></p>
+                <span class='mx-2'>
+                  ${_module.name}
+                </span>
+              </a>
+            </th>
             <td>${_module.description}</td>
           </tr>
         `}`;
@@ -29,16 +33,7 @@ export default class ElmModules extends HTMLElement {
       return trs
     };
 
-    let l_title = ext => (
-      `${`
-      <div class='text-center py-3'>
-        <h2>Modules</h2>
-        ${ext}
-      </div>
-      `}`
-    );
-
-    let template = l_title(`${`
+    let template = this.get_title(`${`
       <a href='${ElmModules.LINK_ADD}'>
         <p class='mb-0 fa fa-plus'></p>
         Add
@@ -47,7 +42,7 @@ export default class ElmModules extends HTMLElement {
 
     if (modules.length > 0) {
       template = `${`
-      ${l_title("")}
+      ${this.get_title()}
       <table class='table'>
         <thead>
           <tr style='width: 31%; text-align: left;'>
@@ -68,6 +63,15 @@ export default class ElmModules extends HTMLElement {
     };
 
     return template
+  };
+
+  get_title(ext="") {
+    return `${`
+      <div class='text-center py-3'>
+        <h2>Modules</h2>
+        ${ext}
+      </div>
+      `}`
   }
 };
 

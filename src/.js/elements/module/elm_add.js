@@ -44,8 +44,7 @@ export default class ElmModuleAdd extends HTMLElement {
 
         (data) => {
           if (data.length == 0) {
-            let inset_query = `INSERT INTO modules (author, name, github_url, description, created_at) VALUES ('filip', '${this._module_name.value}', '${this._github_url.value}', '${this._description.value}', ${Time.unix()})`;
-            console.log(inset_query);
+            let inset_query = `INSERT INTO modules (author, name, github_url, description, created_at) VALUES ('none', '${this._module_name.value}', '${this._github_url.value}', '${this._description.value}', ${Time.unix()})`;
 
             database.query(inset_query, (is_ok) => {
               if (is_ok) location.replace("/")

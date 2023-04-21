@@ -45,8 +45,7 @@ export default class ElmModuleAdd < HTMLElement
       database.query("SELECT name FROM modules WHERE name='#{@module_name.value}'") do |data|
         if data.length == 0
           inset_query = "INSERT INTO modules (author, name, github_url, description, created_at) " +
-            "VALUES ('filip', '#{@module_name.value}', '#{@github_url.value}', '#{@description.value}', #{Time.unix()})"
-          console.log inset_query
+            "VALUES ('none', '#{@module_name.value}', '#{@github_url.value}', '#{@description.value}', #{Time.unix()})"
           database.query(inset_query) do |is_ok|
             if is_ok
               location.replace('/')
