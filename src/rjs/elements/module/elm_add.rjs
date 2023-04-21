@@ -22,16 +22,16 @@ export default class ElmModuleAdd < HTMLElement
     <div class='container' style='width: 60%;'>
       <div class='input-group input-group-sm mb-3'>
         <span class='input-group-text' id='inputGroup-sizing-sm'>Module name</span>
-        <input id='module_name' type='text' class='form-control' onchange='change_module_add()' aria-label='Module name' aria-describedby='inputGroup-sizing-sm'>
+        <input id='module_name' type='text' class='form-control' oninput='change_module_add()' aria-label='Module name' aria-describedby='inputGroup-sizing-sm'>
         <div class='invalid-feedback'>This module name already exists.</div>
       </div>
       <div class='input-group input-group-sm mb-3'>
         <span class='input-group-text' id='inputGroup-sizing-sm'>GitHub URL</span>
-        <input id='github_url' type='text' class='form-control' onchange='change_module_add()' aria-label='GitHub URL' aria-describedby='inputGroup-sizing-sm'>
+        <input id='github_url' type='text' class='form-control' oninput='change_module_add()' aria-label='GitHub URL' aria-describedby='inputGroup-sizing-sm'>
       </div>
       <div class='input-group input-group-sm mb-3'>
         <span class='input-group-text'>Description</span>
-        <textarea id='description' class='form-control' onchange='change_module_add()' aria-label='Description' maxlength='150'></textarea>
+        <textarea id='description' class='form-control' oninput='change_module_add()' aria-label='Description' maxlength='150'></textarea>
       </div>
     </div>
     <div class='text-center'>
@@ -48,7 +48,7 @@ export default class ElmModuleAdd < HTMLElement
             "VALUES ('none', '#{@module_name.value}', '#{@github_url.value}', '#{@description.value}', #{Time.unix()})"
           database.query(inset_query) do |is_ok|
             if is_ok
-              location.replace('/')
+              change_page(:home)
             end
           end
         else

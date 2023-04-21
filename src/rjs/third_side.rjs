@@ -1,5 +1,4 @@
 import 'Database', './third-side/bef/database'
-import './third-side/router/logic'
 import 'Time', './third-side/time'
 
 window.database = Database.new("1")

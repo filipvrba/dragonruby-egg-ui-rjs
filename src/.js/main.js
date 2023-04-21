@@ -1,6 +1,7 @@
 import "../css/bootstrap.min.css";
 import "../css/style.css";
 import "./env";
-import "./routes";
+import "./pages";
 import "./third_side";
-import "./elements"
+import "./elements";
+change_page("home")

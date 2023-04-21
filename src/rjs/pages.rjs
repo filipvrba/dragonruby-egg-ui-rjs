@@ -1,28 +1,38 @@
-export default class Pages
-  ERR_404 = """
-  <div class='container row text-center align-items-center'>
-    <div>
-      <h1>404</h1>
-      <p class='lead'>page not found</p>
-    </div>
+ERR_404 = """
+<div class='container row text-center align-items-center'>
+  <div>
+    <h1>404</h1>
+    <p class='lead'>page not found</p>
   </div>
-  """
-  HOME = """
-  <div class='container py-5'>
-    <elm-header ext='<code><p class='lead text-body'>dre install [module]</p></code>'></elm-header>
-    <main>
-      <elm-modules></elm-modules>
-    </main>
-    <elm-footer></elm-footer>
-  </div>
-  """
-  MODULE_ADD = """
-  <div class='container py-5'>
-    <elm-header ext=""></elm-header>
-    <main>
-      <elm-module-add></elm-module-add>
-    </main>
-    <elm-footer></elm-footer>
-  </div>
-  """
+</div>
+"""
+HOME = """
+<div class='container py-5'>
+  <elm-header ext='<code><p class='lead text-body'>dre install [module]</p></code>'></elm-header>
+  <main>
+    <elm-modules></elm-modules>
+  </main>
+  <elm-footer></elm-footer>
+</div>
+"""
+MODULE_ADD = """
+<div class='container py-5'>
+  <elm-header ext=""></elm-header>
+  <main>
+    <elm-module-add></elm-module-add>
+  </main>
+  <elm-footer></elm-footer>
+</div>
+"""
+
+def change_page(name)
+  page = ERR_404
+  case name
+  when :home
+    page = HOME
+  when :module_add
+    page = MODULE_ADD
+  end
+  document.getElementById('app').innerHTML = page
 end
+window.change_page = change_page 

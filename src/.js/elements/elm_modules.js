@@ -17,7 +17,7 @@ export default class ElmModules extends HTMLElement {
         let tr = `${`
           <tr>
             <th scope='row'>    
-              <a href='${_module.github_url}'>
+              <a href='${_module.github_url}' target='_blank'>
                 <p class='fa fa-github my-0'></p>
                 <span class='mx-2'>
                   ${_module.name}
@@ -34,7 +34,7 @@ export default class ElmModules extends HTMLElement {
     };
 
     let template = this.get_title(`${`
-      <a href='${ElmModules.LINK_ADD}'>
+      <a onclick='change_page("module_add")'>
         <p class='mb-0 fa fa-plus'></p>
         Add
       </a>
@@ -45,9 +45,9 @@ export default class ElmModules extends HTMLElement {
       ${this.get_title()}
       <table class='table'>
         <thead>
-          <tr style='width: 31%; text-align: left;'>
-            <th scope='col'>
-              <a href='${ElmModules.LINK_ADD}'>
+          <tr>
+            <th style='width: 31%; text-align: left;' scope='col'>
+              <a onclick='change_page("module_add")'>
                 <p class='mb-0 fa fa-plus'></p>
                 Add
               </a>
@@ -73,6 +73,4 @@ export default class ElmModules extends HTMLElement {
       </div>
       `}`
   }
-};
-
-ElmModules.LINK_ADD = "/module/add"
+}
