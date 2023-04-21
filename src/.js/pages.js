@@ -8,7 +8,7 @@ const ERR_404 = `${`
 `}`;
 const HOME = `${`
 <div class='container py-5'>
-  <elm-header ext='<code><p class='lead text-body'>dre install [module]</p></code>'></elm-header>
+  <elm-header ext='<code><p class="lead text-body">dre install [module]</p></code>'></elm-header>
   <main>
     <elm-modules></elm-modules>
   </main>
