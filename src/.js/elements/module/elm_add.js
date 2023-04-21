@@ -32,7 +32,7 @@ export default class ElmModuleAdd extends HTMLElement {
       </div>
     </div>
     <div class='text-center'>
-      <button id='btn_add' class='btn btn-primary mb-3' style='width: 25%;' onclick='click_module_add()'>Add</button>
+      <button id='btn_add' class='btn btn-primary' style='width: 25%;' onclick='click_module_add()'>Add</button>
     </div>
     `}`
   };
