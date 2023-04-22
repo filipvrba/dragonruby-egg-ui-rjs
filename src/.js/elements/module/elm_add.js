@@ -18,11 +18,6 @@ export default class ElmModuleAdd extends HTMLElement {
     </div>
     <div class='container' style='width: 60%;'>
       <div class='input-group input-group-sm mb-3'>
-        <span class='input-group-text' id='inputGroup-sizing-sm'>Module name</span>
-        <input id='module_name' type='text' class='form-control' oninput='change_module_add()' aria-label='Module name' aria-describedby='inputGroup-sizing-sm'>
-        <div class='invalid-feedback'>This module name already exists.</div>
-      </div>
-      <div class='input-group input-group-sm mb-3'>
         <span class='input-group-text' id='inputGroup-sizing-sm'>GitHub URL</span>
         <input id='github_url' type='text' class='form-control' oninput='change_module_add()' aria-label='GitHub URL' aria-describedby='inputGroup-sizing-sm'>
         <div class='invalid-feedback'>Invalid page for GitHub repository.</div>
@@ -40,13 +35,18 @@ export default class ElmModuleAdd extends HTMLElement {
 
   click_module_add() {
     if (confirm("Do you really want to add this module?")) {
-      if (this._github_url.value.match(ElmModuleAdd.GITHUB_REGEX)) {
+      if (new RegExp(ElmModuleAdd.GITHUB_REGEX_HEAD.source + ElmModuleAdd.GITHUB_REGEX_TAIL.source).exec(this._github_url.value)) {
+        let module_name = this._github_url.value.replace(
+          ElmModuleAdd.GITHUB_REGEX_HEAD,
+          ""
+        ).replace(".git", "");
+
         database.query(
-          `SELECT name FROM modules WHERE name='${this._module_name.value}'`,
+          `SELECT name FROM modules WHERE name='${module_name}'`,
 
           (data) => {
             if (data.length == 0) {
-              let inset_query = `INSERT INTO modules (author, name, github_url, description, created_at) VALUES ('none', '${this._module_name.value}', '${this._github_url.value}', '${this._description.value}', ${Time.unix()})`;
+              let inset_query = `INSERT INTO modules (author, name, github_url, description, created_at) VALUES ('none', '${module_name}', '${this._github_url.value}', '${this._description.value}', ${Time.unix()})`;
 
               database.query(inset_query, (is_ok) => {
                 if (is_ok) change_page("home")
@@ -65,15 +65,11 @@ export default class ElmModuleAdd extends HTMLElement {
   change_module_add() {
     let is_empty = false;
 
-    if (this._module_name.value == "" || this._github_url.value == "" || this._description.value == "") {
+    if (this._github_url.value == "" || this._description.value == "") {
       is_empty = true
     };
 
     this._btn_add.disabled = is_empty;
-
-    if (this._module_name.classList.value.indexOf("is-invalid") > -1) {
-      this._module_name.classList.remove("is-invalid")
-    };
 
     if (this._github_url.classList.value.indexOf("is-invalid") > -1) {
       this._github_url.classList.remove("is-invalid")
@@ -81,4 +77,5 @@ export default class ElmModuleAdd extends HTMLElement {
   }
 };
 
-ElmModuleAdd.GITHUB_REGEX = /^https:\/\/github.com\/([a-zA-Z0-9\-\_]{1,255})\/[a-zA-Z0-9\-\_]{1,100}(.git)?$/m
+ElmModuleAdd.GITHUB_REGEX_HEAD = /^https:\/\/github.com\/([a-zA-Z0-9\-\_]{1,255})\//m;
+ElmModuleAdd.GITHUB_REGEX_TAIL = /[a-zA-Z0-9\-\_]{1,100}(.git)?$/m

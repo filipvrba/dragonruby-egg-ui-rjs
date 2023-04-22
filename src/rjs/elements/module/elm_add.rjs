@@ -1,5 +1,6 @@
 export default class ElmModuleAdd < HTMLElement
-  GITHUB_REGEX = /^https:\/\/github.com\/([a-zA-Z0-9\-\_]{1,255})\/[a-zA-Z0-9\-\_]{1,100}(.git)?$/
+  GITHUB_REGEX_HEAD = /^https:\/\/github.com\/([a-zA-Z0-9\-\_]{1,255})\//
+  GITHUB_REGEX_TAIL = /[a-zA-Z0-9\-\_]{1,100}(.git)?$/
 
   def initialize
     super
@@ -23,11 +24,6 @@ export default class ElmModuleAdd < HTMLElement
     </div>
     <div class='container' style='width: 60%;'>
       <div class='input-group input-group-sm mb-3'>
-        <span class='input-group-text' id='inputGroup-sizing-sm'>Module name</span>
-        <input id='module_name' type='text' class='form-control' oninput='change_module_add()' aria-label='Module name' aria-describedby='inputGroup-sizing-sm'>
-        <div class='invalid-feedback'>This module name already exists.</div>
-      </div>
-      <div class='input-group input-group-sm mb-3'>
         <span class='input-group-text' id='inputGroup-sizing-sm'>GitHub URL</span>
         <input id='github_url' type='text' class='form-control' oninput='change_module_add()' aria-label='GitHub URL' aria-describedby='inputGroup-sizing-sm'>
         <div class='invalid-feedback'>Invalid page for GitHub repository.</div>
@@ -45,11 +41,13 @@ export default class ElmModuleAdd < HTMLElement
 
   def click_module_add()
     if confirm('Do you really want to add this module?')
-      if @github_url.value.match(GITHUB_REGEX)
-        database.query("SELECT name FROM modules WHERE name='#{@module_name.value}'") do |data|
+      if RegExp.new(GITHUB_REGEX_HEAD.source + GITHUB_REGEX_TAIL.source).exec(@github_url.value)
+        module_name = @github_url.value.replace(GITHUB_REGEX_HEAD, '').replace('.git', '')
+
+        database.query("SELECT name FROM modules WHERE name='#{module_name}'") do |data|
           if data.length == 0
             inset_query = "INSERT INTO modules (author, name, github_url, description, created_at) " +
-              "VALUES ('none', '#{@module_name.value}', '#{@github_url.value}', '#{@description.value}', #{Time.unix()})"
+              "VALUES ('none', '#{module_name}', '#{@github_url.value}', '#{@description.value}', #{Time.unix()})"
             database.query(inset_query) do |is_ok|
               if is_ok
                 change_page(:home)
@@ -67,15 +65,12 @@ export default class ElmModuleAdd < HTMLElement
 
   def change_module_add()
     is_empty = false
-    if @module_name.value == "" || @github_url.value == "" ||
+    if @github_url.value == "" ||
         @description.value == "" 
       is_empty = true
     end
     @btn_add.disabled = is_empty
 
-    if @module_name.classList.value.indexOf('is-invalid') > -1
-      @module_name.classList.remove('is-invalid')
-    end
     if @github_url.classList.value.indexOf('is-invalid') > -1
       @github_url.classList.remove('is-invalid')
     end
