@@ -6,7 +6,9 @@ export default class ElmModules extends HTMLElement {
     database.query(
       "select * from modules",
       modules => this.innerHTML = this.init_html(modules)
-    )
+    );
+
+    window.add_module = this.add_module.bind(this)
   };
 
   init_html(modules) {
@@ -20,11 +22,12 @@ export default class ElmModules extends HTMLElement {
               <a href='${_module.github_url}' target='_blank'>
                 <p class='fa fa-github my-0'></p>
                 <span class='mx-2'>
-                  ${_module.name}
+                ${_module.name}
                 </span>
               </a>
             </th>
             <td>${_module.description}</td>
+            <td style='text-align: center;'>${_module.author}</td>
           </tr>
         `}`;
         trs += tr
@@ -33,12 +36,13 @@ export default class ElmModules extends HTMLElement {
       return trs
     };
 
-    let template = this.get_title(`${`
-      <a onclick='change_page("module_add")'>
+    let t_add = `${`
+      <a onclick='add_module()'>
         <p class='mb-0 fa fa-plus'></p>
         Add
       </a>
-    `}`);
+    `}`;
+    let template = this.get_title(t_add);
 
     if (modules.length > 0) {
       template = `${`
@@ -46,13 +50,11 @@ export default class ElmModules extends HTMLElement {
       <table class='table'>
         <thead>
           <tr>
-            <th style='width: 31%; text-align: left;' scope='col'>
-              <a onclick='change_page("module_add")'>
-                <p class='mb-0 fa fa-plus'></p>
-                Add
-              </a>
+            <th style='width: 30%; text-align: left;' scope='col'>
+              ${t_add}
             </th>
-            <th scope='col'>Description</th>
+            <th style='width: 60%;' scope='col'>Description</th>
+            <th style='text-align: center;' scope='col'>Author</th>
           </tr>
         </thead>
         <tbody>
@@ -72,5 +74,9 @@ export default class ElmModules extends HTMLElement {
         ${ext}
       </div>
       `}`
+  };
+
+  add_module() {
+    change_page("module_add")
   }
 }

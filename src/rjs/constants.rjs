@@ -1,0 +1,5 @@
+ENVS = {
+    github_data: 'envghd'
+}
+
+window.ENVS = ENVS

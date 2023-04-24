@@ -1,5 +1,7 @@
 import 'Database', './third-side/bef/database'
+import 'Authorization', './third-side/bef/authorization'
 import 'Time', './third-side/time'
 
 window.database = Database.new("1")
+window.authorization = Authorization.new
 window.Time = Time

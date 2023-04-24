@@ -1,8 +1,16 @@
 import '../css/bootstrap.min.css'
 import '../css/style.css'
+import './constants'
 import './env'
 import './pages'
 import './third_side'
 import './elements'
+import './github'
 
-change_page(:home)
+authorization.github_callback() do |auth_result|
+  unless auth_result
+    change_page(:home)
+  else
+    change_page(:module_add)
+  end
+end

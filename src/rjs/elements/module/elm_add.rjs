@@ -1,33 +1,54 @@
+import 'Github', '../../github'
+
 export default class ElmModuleAdd < HTMLElement
   GITHUB_REGEX_HEAD = /^https:\/\/github.com\/([a-zA-Z0-9\-\_]{1,255})\//
   GITHUB_REGEX_TAIL = /[a-zA-Z0-9\-\_]{1,100}(.git)?$/
+  REPO_EMPTY_VALUE = 'Choose...'
 
   def initialize
     super
 
     window.click_module_add = click_module_add
     window.change_module_add = change_module_add
-    self.innerHTML = init_html()
+    self.innerHTML = get_title("<elm-spinner></elm-spinner>")
 
-    @module_name = document.getElementById('module_name')
-    @github_url = document.getElementById('github_url')
+    Github.user_data { |d| init_forms(d) }
+  end
+
+  def init_forms(data)
+    self.innerHTML = init_html(data.repos)
+    @author = data.login
+      
+    @repository = document.getElementById('repository')
     @description = document.getElementById('description')
     @btn_add = document.getElementById('btn_add')
 
     change_module_add()
   end
 
-  def init_html()
+  def init_html(repos)
+    l_options = lambda do
+      result = ""
+      repos.forEach do |repo|
+        result += "<option value='#{repo[:url]}'>#{repo[:name]}</option>\n"
+      end
+      return result
+    end
+
     return """
-    <div class='text-center py-3'>
-      <h2>Add a module</h2>
-    </div>
+    #{get_title()}
     <div class='container' style='width: 60%;'>
-      <div class='input-group input-group-sm mb-3'>
-        <span class='input-group-text' id='inputGroup-sizing-sm'>GitHub URL</span>
-        <input id='github_url' type='text' class='form-control' oninput='change_module_add()' aria-label='GitHub URL' aria-describedby='inputGroup-sizing-sm'>
-        <div class='invalid-feedback'>Invalid page for GitHub repository.</div>
+      <div class='input-group mb-3'>
+        <label class='input-group-text' for='repository'>Repository</label>
+        <select class='form-select' id='repository' oninput='change_module_add()'>
+          <option selected>#{REPO_EMPTY_VALUE}</option>
+          #{l_options.call()}
+        </select>
+        <div class='invalid-feedback'>
+          The module is already added.
+        </div>
       </div>
+
       <div class='input-group input-group-sm mb-3'>
         <span class='input-group-text'>Description</span>
         <textarea id='description' class='form-control' oninput='change_module_add()' aria-label='Description' maxlength='150'></textarea>
@@ -39,40 +60,46 @@ export default class ElmModuleAdd < HTMLElement
     """
   end
 
+  def get_title(ext = '')
+    return """
+    <div class='text-center py-3'>
+      <h2>Add a module</h2>
+      #{ext}
+    </div>
+    """
+  end
+
   def click_module_add()
     if confirm('Do you really want to add this module?')
-      if RegExp.new(GITHUB_REGEX_HEAD.source + GITHUB_REGEX_TAIL.source).exec(@github_url.value)
-        module_name = @github_url.value.replace(GITHUB_REGEX_HEAD, '').replace('.git', '')
+      repository_name = @repository.options[@repository.selectedIndex].text
 
-        database.query("SELECT name FROM modules WHERE name='#{module_name}'") do |data|
-          if data.length == 0
-            inset_query = "INSERT INTO modules (author, name, github_url, description, created_at) " +
-              "VALUES ('none', '#{module_name}', '#{@github_url.value}', '#{@description.value}', #{Time.unix()})"
-            database.query(inset_query) do |is_ok|
-              if is_ok
-                change_page(:home)
-              end
+      database.query("SELECT author, name FROM modules WHERE author='#{@author}' AND name='#{repository_name}'") do |data|
+        if data.length == 0
+          inset_query = "INSERT INTO modules (author, name, github_url, description, created_at) " +
+            "VALUES ('#{@author}', '#{repository_name}', '#{@repository.value}', '#{@description.value}', #{Time.unix()})"
+          database.query(inset_query) do |is_ok|
+            if is_ok
+              change_page(:home)
             end
-          else
-            @module_name.classList.add('is-invalid')
           end
+        else
+          @repository.classList.add('is-invalid')
         end
-      else
-        @github_url.classList.add('is-invalid')
       end
+
     end
   end
 
   def change_module_add()
     is_empty = false
-    if @github_url.value == "" ||
+    if @repository.value == REPO_EMPTY_VALUE ||
         @description.value == "" 
       is_empty = true
     end
     @btn_add.disabled = is_empty
 
-    if @github_url.classList.value.indexOf('is-invalid') > -1
-      @github_url.classList.remove('is-invalid')
+    if @repository.classList.value.indexOf('is-invalid') > -1
+      @repository.classList.remove('is-invalid')
     end
   end
 end

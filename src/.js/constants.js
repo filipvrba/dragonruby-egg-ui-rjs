@@ -1,1 +1,2 @@
-export const SQL_ERR = "SQL Error"
+const ENVS = {github_data: "envghd"};
+window.ENVS = ENVS

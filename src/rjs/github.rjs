@@ -1,0 +1,35 @@
+import 'Net', './third-side/bef/net'
+
+export default class Github
+  def self.user_data(&callback)
+    access_token = sessionStorage.getItem(:access_token)
+    scopes = []
+    github_result = {
+      token_type: "bearer",
+      access_token: access_token
+    }
+
+    authorization.get_json("https://api.github.com/user", github_result) do |user|
+      if user.length == 0
+        sessionStorage.setItem(:access_token, nil)
+        location.assign("https://github.com/login/oauth/authorize" +
+          "?scope=#{env.VITE_SCOPE}&client_id=#{env.VITE_CLIENT_ID}")
+      else
+        Net.get_json(user[:repos_url]) do |repos|
+          data = {
+            login: user[:login],
+            repos: []
+          }
+          repos.forEach do |repo|
+            data[:repos].push({
+              name: repo[:name],
+              url: repo[:html_url]
+            })
+          end
+
+          callback(data) if callback
+        end
+      end
+    end
+  end
+end
