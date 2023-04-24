@@ -6,12 +6,6 @@ export default class Authorization {
     Net.get_json(uri, (data) => {if (callback) callback(data)})
   };
 
-  get_github_data(url, github_result, callback) {
-    this.get_json(url, github_result, (data) => {
-      if (callback) callback(data)
-    })
-  };
-
   get_json(url, github_result, callback) {
     fetch(
       url,

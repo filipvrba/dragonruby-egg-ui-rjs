@@ -10,12 +10,6 @@ export default class Authorization
     end
   end
 
-  def get_github_data(url, github_result, &callback)
-    get_json(url, github_result) do |data|
-      callback(data) if callback
-    end
-  end
-
   def get_json url, github_result, &callback
     fetch(url, {
       headers: {
