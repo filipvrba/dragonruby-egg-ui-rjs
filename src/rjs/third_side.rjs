@@ -5,3 +5,6 @@ import 'Time', './third-side/time'
 window.database = Database.new("1")
 window.authorization = Authorization.new
 window.Time = Time
+
+def lol
+end
