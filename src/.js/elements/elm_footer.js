@@ -12,8 +12,7 @@ export default class ElmFooter extends HTMLElement {
             <a href='https://dragonruby.itch.io/dragonruby-gtk'>DragonRuby</a></p>
           <p class='text-center text-body-secondary'>
           Created by <a href='https://www.reddit.com/user/Intelligent-End-9399'>
-            Intelligent-End-9399</a>
-            and here is the <a href='https://github.com/filipvrba/dragonruby-egg-ui-rjs/blob/main/README.md'>README</a>.
+            Intelligent-End-9399</a>.
           </p>
       </footer>
     `}`;
