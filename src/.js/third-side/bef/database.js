@@ -1,4 +1,5 @@
 import Net from "./net";
+import { ENV } from "../../env";
 
 export default class Database {
   constructor(name) {
@@ -15,7 +16,7 @@ export default class Database {
 
   get(query, callback) {
     let query_encode = encodeURIComponent(query);
-    let uri = `${env.VITE_URL_API}?token=${env.VITE_BEF_CLIENT}&database=${env.VITE_DATABASE}&query=${query_encode}`;
+    let uri = `${ENV.VITE_URL_API}?token=${ENV.VITE_BEF_CLIENT}&database=${ENV.VITE_DATABASE}&query=${query_encode}`;
     Net.get_json(uri, (data) => {if (callback) callback(data)})
   };
 

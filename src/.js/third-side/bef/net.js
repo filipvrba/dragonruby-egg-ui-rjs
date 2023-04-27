@@ -1,3 +1,5 @@
+import { ENV } from "../../env";
+
 export default class Net {
   static get_json(url, callback) {
     fetch(url).then(response => response.json()).then((data) => {
@@ -13,9 +15,9 @@ export default class Net {
   static send(method, query, callback) {
     method = method.toUpperCase();
 
-    fetch(env.VITE_URL_API, {method, headers: {
-      Token: env.VITE_BEF_SERVER,
-      Database: env.VITE_DATABASE,
+    fetch(ENV.VITE_URL_API, {method, headers: {
+      Token: ENV.VITE_BEF_SERVER,
+      Database: ENV.VITE_DATABASE,
       Query: query
     }}).then(response => response.json()).then((data) => {
       if (data.status_code == 403 || data.status_code == 405 || data.status == Net.SQL_ERR) {

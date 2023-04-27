@@ -1,3 +1,5 @@
+import ['ENV'], '../../env'
+
 export default class Net
   SQL_ERR = 'SQL Error'
 
@@ -18,11 +20,11 @@ export default class Net
 
   def self.send(method, query, &callback)
     method = method.toUpperCase()
-    fetch(env.VITE_URL_API, {
+    fetch(ENV::VITE_URL_API, {
       method: method,
       headers: {
-        'Token': env.VITE_BEF_SERVER,
-        'Database': env.VITE_DATABASE,
+        'Token': ENV::VITE_BEF_SERVER,
+        'Database': ENV::VITE_DATABASE,
         'Query': query,
       }
     })

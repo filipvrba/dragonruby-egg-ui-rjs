@@ -1,7 +1,6 @@
 import '../css/bootstrap.min.css'
 import '../css/style.css'
 import './constants'
-import './env'
 import './pages'
 import './third_side'
 import './elements'

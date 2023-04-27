@@ -1,4 +1,5 @@
 import Net from "./third-side/bef/net";
+import { ENV } from "./env";
 
 export default class Github {
   static user_data(callback) {
@@ -13,7 +14,7 @@ export default class Github {
       (user) => {
         if (user.length == 0) {
           sessionStorage.setItem("access_token", null);
-          location.assign(`https://github.com/login/oauth/authorize?scope=${env.VITE_SCOPE}&client_id=${env.VITE_CLIENT_ID}`)
+          location.assign(`https://github.com/login/oauth/authorize?scope=${ENV.VITE_SCOPE}&client_id=${ENV.VITE_CLIENT_ID}`)
         } else {
           Net.get_json(user.repos_url, (repos) => {
             let data = {login: user.login, repos: []};

@@ -1,4 +1,5 @@
 import 'Net', './third-side/bef/net'
+import ['ENV'], './env'
 
 export default class Github
   def self.user_data(&callback)
@@ -13,7 +14,7 @@ export default class Github
       if user.length == 0
         sessionStorage.setItem(:access_token, nil)
         location.assign("https://github.com/login/oauth/authorize" +
-          "?scope=#{env.VITE_SCOPE}&client_id=#{env.VITE_CLIENT_ID}")
+          "?scope=#{ENV::VITE_SCOPE}&client_id=#{ENV::VITE_CLIENT_ID}")
       else
         Net.get_json(user[:repos_url]) do |repos|
           data = {

@@ -1,8 +1,9 @@
 import Net from "./net";
+import { ENV } from "../../env";
 
 export default class Authorization {
   get_github_access_token(code, callback) {
-    let uri = `${env.VITE_URL_API}/github/access_token?client_id=${env.VITE_CLIENT_ID}&database=${env.VITE_DATABASE}&code=${code}&scope=${env.VITE_SCOPE}`;
+    let uri = `${ENV.VITE_URL_API}/github/access_token?client_id=${ENV.VITE_CLIENT_ID}&database=${ENV.VITE_DATABASE}&code=${code}&scope=${ENV.VITE_SCOPE}`;
     Net.get_json(uri, (data) => {if (callback) callback(data)})
   };
 
@@ -28,7 +29,7 @@ export default class Authorization {
       authorization.get_github_access_token(code, (result) => {
         window.history.replaceState(null, null, "/");
 
-        if (result.scope.indexOf(env.VITE_SCOPE) > -1) {
+        if (result.scope.indexOf(ENV.VITE_SCOPE) > -1) {
           sessionStorage.setItem("access_token", result.access_token);
           if (callback) callback(result)
         }
