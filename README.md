@@ -9,7 +9,8 @@ This is a modules manager for [DragonRuby](https://dragonruby.itch.io/dragonruby
 - [2 Module Structure](#2-module-structure)
 - [3 Module Installation](#3-module-installation)
 - [4 Conclusion](#4-conclusion)
-- [5 Contributors](#5-contributors)
+- [5 Tutorials](#5-tutorials)
+- [6 Contributors](#6-contributors)
 
 ## 1 Adding Modules
 
@@ -51,5 +52,10 @@ DragonRuby-Egg is an ideal tool for game developers working with DragonRuby who 
 
 Overall, DragonRuby-Egg is a useful tool for game developers working with DragonRuby who want to quickly and easily add modules to their projects. Thanks to its integration with GitHub and ease of use, DragonRuby-Egg offers a practical solution for module management in DragonRuby.
 
-## 5 Contributors
+## 5 Tutorials
+Here are the tutorials for using DragonRuby Egg.
+
+- [Usage Tutorial (CLI)](https://github.com/filipvrba/dragonruby-egg-rb/blob/main/docs/usage_tutorial.md): *This article will discuss how to use the DragonRuby Egg (CLI) application.*
+
+## 6 Contributors
 - [Filip Vrba](https://github.com/filipvrba) - creator and maintainer
