@@ -1,6 +1,8 @@
 # DragonRuby Egg (UI)
 This is a modules manager for [DragonRuby](https://dragonruby.itch.io/dragonruby-gtk) that allows users to download modules for use in their projects. The application is developed using the [rubyjs-vite](https://github.com/filipvrba/ruby-js) tool, which transforms *RJS* scripts into native *JavaScript* scripts.
 
+**Please note that this repository is now archived and no longer actively maintained.**
+
 > ### Info
 > It should be noted that the web application is just a prototype, a testing version that serves to verify functions and improve the user experience.
 
